@@ -7,12 +7,10 @@ from .models import Offer
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('username', )
+        fields = ('id', )
 
 
-class OfferSerializer(serializers.HyperlinkedModelSerializer):
-    owner = UserSerializer()
-
+class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Offer
         fields = '__all__'
