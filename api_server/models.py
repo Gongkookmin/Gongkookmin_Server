@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Offer(models.Model):
-    image = models.ImageField(upload_to="offer_images")
+    image = models.ImageField(upload_to="offer_images", null=True, blank=True)
     thumbnail = ImageSpecField(
         source='image',
         processors = [Thumbnail(100, 100)],

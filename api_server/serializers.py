@@ -39,9 +39,8 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         fields = ('token', 'username', 'password', 'first_name', 'last_name')
 
 
-class OfferSerializer(serializers.ModelSerializer):
-    owner = UserSerializer()
 
+class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Offer
         fields = '__all__'
