@@ -18,14 +18,19 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework_jwt.views import obtain_jwt_token
+
 from rest_framework.routers import DefaultRouter
-import api_server.views
+from api_server.views import *
 
 router = DefaultRouter()
-router.register('offer', api_server.views.OfferViewSet)
+router.register('offer', OfferViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('token-auth/', obtain_jwt_token),
+    path('current_user/', get_current_user),
+    path('users/create', CreateUserView.as_view()),
 ]
 
 urlpatterns += router.urls
