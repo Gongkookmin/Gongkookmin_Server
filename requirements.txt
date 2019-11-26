@@ -3,8 +3,10 @@ django-appconf==1.0.3
 django-imagekit==4.0.2
 django-rest-framework==0.1.0
 djangorestframework==3.10.3
+djangorestframework-jwt==1.11.0
 pilkit==2.0
 Pillow==6.2.1
+PyJWT==1.7.1
 pytz==2019.3
 six==1.13.0
 sqlparse==0.3.0

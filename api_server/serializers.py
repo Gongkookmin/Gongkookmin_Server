@@ -26,9 +26,9 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create(
-            username = validated_data['username'],
-            first_name = validated_data['first_name'],
-            last_name = validated_data['last_name']
+            username=validated_data['username'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name']
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -37,7 +37,6 @@ class UserSerializerWithToken(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('token', 'username', 'password', 'first_name', 'last_name')
-
 
 
 class OfferSerializer(serializers.ModelSerializer):
