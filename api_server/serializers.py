@@ -19,13 +19,19 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OfferSerializer(serializers.ModelSerializer):
+class OfferMetaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Offer
+        fields = ("id", "owner", "title", "created_at", "open_kakao_link")
+
+
+class OfferFullSerializer(serializers.ModelSerializer):
     title = serializers.CharField(min_length=2, max_length=100)
     body = serializers.CharField(min_length=5)
 
     class Meta:
         model = Offer
-        fields = ("owner", "title", "body", "created_at", "open_kakao_link")
+        fields = ("id", "owner", "title", "body", "created_at", "open_kakao_link")
 
     def create(self, validated_data):
         user = None

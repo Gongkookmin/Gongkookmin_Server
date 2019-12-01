@@ -11,16 +11,30 @@ from .paginations import OfferPagination
 
 
 # Create your views here.
-class OfferViewSet(ModelViewSet):
+class MultiSerializerViewSet(ModelViewSet):
+    serializers = {
+        'default': None,
+    }
+
+    def get_serializer_class(self):
+            return self.serializers.get(self.action,
+                        self.serializers['default'])
+
+
+class OfferViewSet(MultiSerializerViewSet):
     queryset = Offer.objects.all().order_by('-created_at')
-    serializer_class = OfferSerializer
     pagination_class = OfferPagination
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (authentication.JSONWebTokenAuthentication, )
 
+    serializers = {
+        'list': OfferMetaSerializer,
+        'default': OfferFullSerializer,
+    }
+
 
 class MyOffer(ListModelMixin, GenericAPIView):
-    serializer_class = OfferSerializer
+    serializer_class = OfferMetaSerializer
     pagination_class = OfferPagination
     permission_classes = (permissions.IsAuthenticated, )
     authentication_classes = (authentication.JSONWebTokenAuthentication, )
@@ -34,7 +48,7 @@ class MyOffer(ListModelMixin, GenericAPIView):
 
 
 class SearchOffer(ListModelMixin, GenericAPIView):
-    serializer_class = OfferSerializer
+    serializer_class = OfferMetaSerializer
     pagination_class = OfferPagination
     permission_classes = (permissions.IsAuthenticated, )
 
