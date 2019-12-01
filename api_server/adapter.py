@@ -1,8 +1,9 @@
 from django import forms
 from django.conf import settings
+from django.shortcuts import resolve_url
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.compat import force_str, ugettext_lazy as _
-
+from allauth import app_settings
 
 class OnlyForKookminAdapter(DefaultAccountAdapter):
 
@@ -18,3 +19,6 @@ class OnlyForKookminAdapter(DefaultAccountAdapter):
             raise forms.ValidationError("닉네임은 두 글자 이상이어야 합니다.")
         super().clean_username(username, shallow)
         return username
+
+    def get_email_confirmation_redirect_url(self, request):
+        return resolve_url("email_complete")
