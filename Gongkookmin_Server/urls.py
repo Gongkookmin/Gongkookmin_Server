@@ -23,6 +23,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 from rest_framework.routers import DefaultRouter
 from api_server.views import *
+from rest_framework.schemas import get_schema_view
 
 router = DefaultRouter()
 router.register('offer', OfferViewSet)
@@ -33,7 +34,13 @@ urlpatterns = [
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('account/', include('allauth.urls')),
     path('my-offer', MyOffer.as_view()),
-    path('search', SearchOffer.as_view())
+    path('search', SearchOffer.as_view()),
+
+    path('openapi', get_schema_view(
+        title="Gongkookmin",
+        description="API for all things of this project",
+        version="1.0.0"
+    ), name="openapi-schema")
 ]
 
 urlpatterns += router.urls
