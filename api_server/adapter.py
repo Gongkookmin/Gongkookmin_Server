@@ -21,7 +21,4 @@ class OnlyForKookminAdapter(DefaultAccountAdapter):
         return username
 
     def get_email_confirmation_redirect_url(self, request):
-        if request.user.is_authenticated:
-            return resolve_url("email_complete")
-        else:
-            return app_settings.EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL
+        return resolve_url("email_complete")
