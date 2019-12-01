@@ -63,6 +63,8 @@ INSTALLED_APPS = [
 
     'imagekit',
     'api_server',
+
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

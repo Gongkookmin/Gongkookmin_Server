@@ -15,18 +15,30 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
-
-from rest_framework_jwt.views import obtain_jwt_token
+from django.views.generic import TemplateView
 
 from rest_framework.routers import DefaultRouter
+from rest_framework import permissions
 from api_server.views import *
-from rest_framework.schemas import get_schema_view
+
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 router = DefaultRouter()
 router.register('offer', OfferViewSet)
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Gongkookmin API",
+      default_version='v1',
+      description="Api description",
+      license=openapi.License(name="MIT License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,12 +47,11 @@ urlpatterns = [
     path('account/', include('allauth.urls')),
     path('my-offer', MyOffer.as_view()),
     path('search', SearchOffer.as_view()),
+    path('email-complte', TemplateView.as_view(template_name="email_complete.html")),
 
-    path('openapi', get_schema_view(
-        title="Gongkookmin",
-        description="API for all things of this project",
-        version="1.0.0"
-    ), name="openapi-schema")
+    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 urlpatterns += router.urls
