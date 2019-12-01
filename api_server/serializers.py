@@ -1,4 +1,4 @@
-from .models import Offer
+from .models import Offer, Image
 from rest_auth.serializers import LoginSerializer
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
@@ -8,17 +8,35 @@ from rest_framework import serializers, exceptions
 
 UserModel = get_user_model()
 
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
+
+
 class OfferSerializer(serializers.ModelSerializer):
     title = serializers.CharField(min_length=2, max_length=100)
     body = serializers.CharField(min_length=5)
 
     class Meta:
         model = Offer
-        fields = '__all__'
+        fields = ("title", "body", "created_at", "open_kakao_link")
+
+    def create(self, validated_data):
+        user = None
+        request = self.context.get('request')
+        if request and hasattr(request, "user"):
+            user = request.user
+        token = request.META["Authorization"]
+        # validated_data.owner()
+        print(type(validated_data))
+        return Offer(**validated_data)
 
 
 # 메일 인증을 안했을 때, 비밀번호, 아이디가 틀렸을 때 에러메시지 변경을 위해 생성
 class CustomLoginSerializer(LoginSerializer):
+
     def validate(self, attrs):
         username = attrs.get('username')
         email = attrs.get('email')
