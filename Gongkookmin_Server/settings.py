@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os, json
+import os, json, datetime
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -205,6 +205,7 @@ JWT_AUTH = {
 
     'JWT_VERIFY': True,
     'JWT_VERIFY_EXPIRATION': False,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 
 }
