@@ -36,11 +36,7 @@ class OfferSerializer(serializers.ModelSerializer):
         token = token.split()[-1]
         data = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
         user = get_object_or_404(User, pk=data["user_id"])
-
-        validated_data.update({
-            "owner": user
-        })
-        return Offer(**validated_data)
+        return Offer.objects.create(owner=user, **validated_data)
 
 
 # 메일 인증을 안했을 때, 비밀번호, 아이디가 틀렸을 때 에러메시지 변경을 위해 생성
