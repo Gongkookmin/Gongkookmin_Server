@@ -77,10 +77,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Gongkookmin_Server.urls'
 
+TEMPLATE_ROOT = os.path.join(BASE_DIR, "templates")
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_ROOT],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
