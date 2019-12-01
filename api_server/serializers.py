@@ -20,12 +20,13 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class OfferMetaSerializer(serializers.ModelSerializer):
+    images = ImageSerializer(many=True, read_only=True)
     owner_name = serializers.CharField(source="owner.username", allow_blank=True)
     created_at = serializers.DateTimeField(format="%Y/%m/%d-%H:%M")
 
     class Meta:
         model = Offer
-        fields = ("id", "owner", "owner_name", "title", "created_at")
+        fields = ("id", "owner", "owner_name", "title", "images", "created_at")
 
 
 class OfferFullSerializer(serializers.ModelSerializer):
@@ -33,7 +34,7 @@ class OfferFullSerializer(serializers.ModelSerializer):
     body = serializers.CharField(min_length=5)
     owner_name = serializers.CharField(required=False, source="owner.username", allow_blank=True)
     owner = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
-    created_at = serializers.DateTimeField(format="%Y/%m/%d-%H:%M")
+    created_at = serializers.DateTimeField(required=False, format="%Y/%m/%d-%H:%M")
 
     class Meta:
         model = Offer
