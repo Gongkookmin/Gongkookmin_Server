@@ -32,7 +32,8 @@ urlpatterns = [
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('account/', include('allauth.urls')),
-
+    path('my-offer', MyOffer.as_view()),
+    path('search', SearchOffer.as_view())
 ]
 
 urlpatterns += router.urls
