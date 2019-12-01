@@ -150,7 +150,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 
-REST_USER_JWT = True
+REST_USE_JWT = True
 
 # Email Setting
 # Email test with Console
