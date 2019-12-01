@@ -47,7 +47,7 @@ urlpatterns = [
     path('account/', include('allauth.urls')),
     path('my-offer', MyOffer.as_view()),
     path('search', SearchOffer.as_view()),
-    path('email-complte', TemplateView.as_view(template_name="email_complete.html")),
+    path('email-complte', TemplateView.as_view(template_name="email_complete.html"), name="email_complete"),
 
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
