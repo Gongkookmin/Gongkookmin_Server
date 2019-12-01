@@ -3,10 +3,14 @@ from rest_auth.serializers import LoginSerializer
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
 from rest_framework import serializers, exceptions
 
-UserModel = get_user_model()
+import ast, json
+from jose import jwt
+
+User = get_user_model()
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -21,16 +25,21 @@ class OfferSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Offer
-        fields = ("title", "body", "created_at", "open_kakao_link")
+        fields = ("owner", "title", "body", "created_at", "open_kakao_link")
 
     def create(self, validated_data):
         user = None
         request = self.context.get('request')
         if request and hasattr(request, "user"):
             user = request.user
-        token = request.META["Authorization"]
-        # validated_data.owner()
-        print(type(validated_data))
+        token = request.META["HTTP_AUTHORIZATION"]
+        token = token.split()[-1]
+        data = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        user = get_object_or_404(User, pk=data["user_id"])
+
+        validated_data.update({
+            "owner": user
+        })
         return Offer(**validated_data)
 
 
@@ -42,33 +51,7 @@ class CustomLoginSerializer(LoginSerializer):
         email = attrs.get('email')
         password = attrs.get('password')
 
-        user = None
-
-        if 'allauth' in settings.INSTALLED_APPS:
-            from allauth.account import app_settings
-
-            # Authentication through email
-            if app_settings.AUTHENTICATION_METHOD == app_settings.AuthenticationMethod.EMAIL:
-                user = self._validate_email(email, password)
-
-            # Authentication through username
-            elif app_settings.AUTHENTICATION_METHOD == app_settings.AuthenticationMethod.USERNAME:
-                user = self._validate_username(username, password)
-
-            # Authentication through either username or email
-            else:
-                user = self._validate_username_email(username, email, password)
-
-        else:
-            # Authentication without using allauth
-            if email:
-                try:
-                    username = UserModel.objects.get(email__iexact=email).get_username()
-                except UserModel.DoesNotExist:
-                    pass
-
-            if username:
-                user = self._validate_username_email(username, '', password)
+        user = self._validate_email(email, password)
 
         # Did we get back an active user?
         if user:
@@ -80,12 +63,9 @@ class CustomLoginSerializer(LoginSerializer):
             raise exceptions.ValidationError(msg)
 
         # If required, is the email verified?
-        if 'rest_auth.registration' in settings.INSTALLED_APPS:
-            from allauth.account import app_settings
-            if app_settings.EMAIL_VERIFICATION == app_settings.EmailVerificationMethod.MANDATORY:
-                email_address = user.emailaddress_set.get(email=user.email)
-                if not email_address.verified:
-                    raise serializers.ValidationError("이메일을 확인하시고 이메일 인증을 완료해주세요.")
+        email_address = user.emailaddress_set.get(email=user.email)
+        if not email_address.verified:
+            raise serializers.ValidationError("이메일을 확인하시고 이메일 인증을 완료해주세요.")
 
         attrs['user'] = user
         return attrs

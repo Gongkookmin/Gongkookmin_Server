@@ -9,7 +9,7 @@ User = get_user_model()
 
 # Create your models here.
 class Offer(models.Model):
-    owner = models.ForeignKey(User, related_name="offers", on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, blank=True, related_name="offers", on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -33,3 +33,6 @@ class Image(models.Model):
         format='JPEG',
         options={'quality':60}
     )
+
+    def __str__(self):
+        return self.image.path
