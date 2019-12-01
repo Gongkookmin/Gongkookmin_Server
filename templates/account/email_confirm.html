@@ -3,29 +3,36 @@
 {% load i18n %}
 {% load account %}
 
-{% block head_title %}{% trans "Confirm E-mail Address" %}{% endblock %}
-
+{% block head_title %}{% trans "공국민 이메일 인증" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Confirm E-mail Address" %}</h1>
+    <div class="card" style="margin-top:10rem; width:40rem; margin-left:auto; margin-right: auto;">
+        <div class="card-body">
+            <h1 class="card-title">{% trans "이메일 인증 확인" %}</h1>
 
-{% if confirmation %}
+            {% if confirmation %}
 
-{% user_display confirmation.email_address.user as user_display %}
+                {% user_display confirmation.email_address.user as user_display %}
 
-<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
+                <p>{% blocktrans with confirmation.email_address.email as email %}
+                    {{ user_display }}님의 이메일이 <a href="mailto:{{ email }}">{{ email }}</a>가 맞다면<br>
+                    아래의 확인 버튼을 눌러 주세요.
+                {% endblocktrans %}
+                </p>
 
-<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
-{% csrf_token %}
-    <button type="submit">{% trans 'Confirm' %}</button>
-</form>
+                <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">{% trans '확인' %}</button>
+                </form>
 
-{% else %}
+            {% else %}
 
-{% url 'account_email' as email_url %}
+                {% url 'account_email' as email_url %}
 
-<p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
-
-{% endif %}
-
+                <p>{% blocktrans %}인증 이메일의 기한이 만료되었습니다.
+                    새로운 인증메일을 발송하시고 싶다면 아래의 링크를 눌러주세요.
+                    <a href="{{ email_url }}"> 인증메일 재발급</a>{% endblocktrans %}</p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

@@ -1,9 +1,12 @@
-{% load account %}{% user_display user as user_display %}{% load i18n %}{% autoescape off %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Hello from {{ site_name }}!
+{% load account %}{% user_display user as user_display %}{% load i18n %}{% autoescape off %}
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+안녕하세요 {{user_display}} 님!
+공국민에 가입해주셔서 감사드립니다.
 
-You're receiving this e-mail because user {{ user_display }} has given yours as an e-mail address to connect their account.
+본인이 맞으시다면 아래의 인증 링크를 따라 회원가입을 완료해주시면 감사하겠습니다.
+ {{ activate_url }}
 
-To confirm this is correct, go to {{ activate_url }}
 {% endblocktrans %}
-{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Thank you from {{ site_name }}!
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}{{ site_name }} 드림
 {{ site_domain }}{% endblocktrans %}
 {% endautoescape %}

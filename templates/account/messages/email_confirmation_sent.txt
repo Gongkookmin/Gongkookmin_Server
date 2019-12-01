@@ -1,2 +1,2 @@
 {% load i18n %}
-{% blocktrans %}Confirmation e-mail sent to {{email}}.{% endblocktrans %}
+{% blocktrans %}인증 이메일이 {{email}}으로 발송되엇습니다.{% endblocktrans %}

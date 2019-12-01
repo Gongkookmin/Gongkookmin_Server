@@ -1,4 +1,4 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans %}Please Confirm Your E-mail Address{% endblocktrans %}
+{% blocktrans %}이메일을 확인하시고 계정을 활성화해주세요!{% endblocktrans %}
 {% endautoescape %}
