@@ -17,3 +17,4 @@ class OnlyForKookminAdapter(DefaultAccountAdapter):
         if len(username) < 2:
             raise forms.ValidationError("닉네임은 두 글자 이상이어야 합니다.")
         super().clean_username(username, shallow)
+        return username
