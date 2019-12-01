@@ -204,7 +204,6 @@ JWT_AUTH = {
     'rest_framework_jwt.utils.jwt_payload_handler',
 
     'JWT_VERIFY': True,
-    'JWT_VERIFY_EXPIRATION': True,
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 
 }
