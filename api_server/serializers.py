@@ -20,18 +20,24 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class OfferMetaSerializer(serializers.ModelSerializer):
+    owner_name = serializers.CharField(source="owner.username", allow_blank=True)
+    created_at = serializers.DateTimeField(format="%Y/%m/%d-%H:%M")
+
     class Meta:
         model = Offer
-        fields = ("id", "owner", "title", "created_at", "open_kakao_link")
+        fields = ("id", "owner", "owner_name", "title", "created_at")
 
 
 class OfferFullSerializer(serializers.ModelSerializer):
     title = serializers.CharField(min_length=2, max_length=100)
     body = serializers.CharField(min_length=5)
+    owner_name = serializers.CharField(required=False, source="owner.username", allow_blank=True)
+    owner = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
+    created_at = serializers.DateTimeField(format="%Y/%m/%d-%H:%M")
 
     class Meta:
         model = Offer
-        fields = ("id", "owner", "title", "body", "created_at", "open_kakao_link")
+        fields = ("id", "owner", "owner_name", "title", "body", "created_at", "open_kakao_link")
 
     def create(self, validated_data):
         user = None
