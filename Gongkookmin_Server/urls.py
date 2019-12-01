@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 
 from rest_framework_jwt.views import obtain_jwt_token
@@ -28,9 +29,10 @@ router.register('offer', OfferViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('token-auth/', obtain_jwt_token),
-    path('current_user/', get_current_user),
-    path('users/create', CreateUserView.as_view()),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('account/', include('allauth.urls')),
+
 ]
 
 urlpatterns += router.urls

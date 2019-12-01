@@ -1,0 +1,2 @@
+{% load i18n %}
+{% blocktrans %}{{email}} 계정이 활성화되었습니다.{% endblocktrans %}
