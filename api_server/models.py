@@ -9,14 +9,7 @@ User = get_user_model()
 
 # Create your models here.
 class Offer(models.Model):
-    image = models.ImageField(upload_to="offer_images", null=True, blank=True)
-    thumbnail = ImageSpecField(
-        source='image',
-        processors = [Thumbnail(100, 100)],
-        format='JPEG',
-        options={'quality':60}
-    )
-    owner = models.ForeignKey(User, related_name="offers", on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, blank=True, related_name="offers", on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -31,3 +24,15 @@ class Offer(models.Model):
         return self.title
 
 
+class Image(models.Model):
+    offer = models.ForeignKey(Offer, related_name="images", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="offer_images", null=True, blank=True)
+    thumbnail = ImageSpecField(
+        source='image',
+        processors = [Thumbnail(100, 100)],
+        format='JPEG',
+        options={'quality':60}
+    )
+
+    def __str__(self):
+        return self.image.path
