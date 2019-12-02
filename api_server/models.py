@@ -20,10 +20,10 @@ def get_file_path(instance, filename):
 
 class Offer(models.Model):
     owner = models.ForeignKey(User, blank=True, related_name="offers", on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    body = models.TextField()
+    body = models.TextField(max_length=400)
     open_kakao_link = models.URLField()
     expires = models.CharField(max_length=10, default="none")
     image = models.ImageField(upload_to=get_file_path, blank=True, null=True)
