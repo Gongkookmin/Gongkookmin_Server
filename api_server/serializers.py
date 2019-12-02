@@ -16,17 +16,18 @@ User = get_user_model()
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = '__all__'
+        fields = ('image', 'thumbnail',)
 
 
 class OfferMetaSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True, read_only=True)
+    thumbnail = serializers.SerializerMethodField()
     owner_name = serializers.CharField(source="owner.username", allow_blank=True)
     created_at = serializers.DateTimeField(format="%Y/%m/%d-%H:%M")
+    thumbnail = serializers.ImageField(required=False)
 
     class Meta:
         model = Offer
-        fields = ("id", "owner", "owner_name", "title", "images", "created_at")
+        fields = ("id", "owner", "owner_name", "title", "thumbnail", "created_at", "expires")
 
 
 class OfferFullSerializer(serializers.ModelSerializer):
@@ -38,7 +39,7 @@ class OfferFullSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Offer
-        fields = ("id", "owner", "owner_name", "title", "body", "created_at", "open_kakao_link")
+        fields = ("id", "owner", "owner_name", "title", "body", "image", "image2", "image3", "created_at", "open_kakao_link", "expires")
 
     def create(self, validated_data):
         user = None
