@@ -2,9 +2,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework import permissions
 
 from rest_framework_jwt import authentication
+from jose import jwt
 
 from .serializers import *
 from .paginations import OfferPagination
@@ -31,6 +33,23 @@ class OfferViewSet(MultiSerializerViewSet):
         'list': OfferMetaSerializer,
         'default': OfferFullSerializer,
     }
+
+    def destroy(self, request, *args, **kwargs):
+        user = request.user
+        token = request.META["HTTP_AUTHORIZATION"]
+        token = token.split()[-1]
+        data = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        user = get_object_or_404(User, pk=data["user_id"])
+
+        try:
+            instance = self.get_object()
+            print(user)
+            print(instance.owner)
+            if user == instance.owner:
+                self.perform_destroy(instance)
+        except status.HTTP_404_NOT_FOUND:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MyOffer(ListModelMixin, GenericAPIView):
