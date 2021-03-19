@@ -9,7 +9,7 @@ django-appconf==1.0.3
 django-imagekit==4.0.2
 django-rest-auth==0.9.5
 django-rest-framework==0.1.0
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 drf-yasg==1.17.0
 ecdsa==0.14.1
